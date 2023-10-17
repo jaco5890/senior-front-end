@@ -21,7 +21,7 @@ export default function App() {
       <IconRegistry icons={[EvaIconsPack]} />
       <ApplicationProvider {...eva} theme={defaultTheme}>
         <ToastProvider
-          successColor={Colors.default.success}
+          successColor={Colors.default.secondary}
           dangerColor={Colors.default.red}
           warningColor={Colors.default.warning}>
           <Provider store={store}>
