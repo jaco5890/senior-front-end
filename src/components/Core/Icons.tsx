@@ -31,3 +31,13 @@ export const CalenderIcon = (props: any) => (
     width="25"
   />
 );
+
+export const TrashIcon = (props: any) => (
+  <Icon
+    {...props}
+    name="trash-outline"
+    fill={Colors.default.red}
+    height="25"
+    width="25"
+  />
+);

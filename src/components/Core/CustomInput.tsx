@@ -33,12 +33,14 @@ export const CustomInput = (props: any): React.ReactElement => {
     size,
     disabled = false,
     multiline = false,
+    key = '',
   } = props;
 
   const styles = useStyleSheet(themedStyles);
 
   return (
     <Input
+      key={key}
       autoCapitalize="none"
       autoFocus={autoFocus}
       blurOnSubmit={false}

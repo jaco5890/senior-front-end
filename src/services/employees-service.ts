@@ -24,7 +24,7 @@ export function deleteEmployee(employeeId: any) {
   return makeWebRequest(endpoint, Token.apiToken.token, 'DELETE');
 }
 
-export function updateEmployee(employee: any) {
+export function updateExistingEmployee(employee: any) {
   const endpoint = ServicePath.url.base + ServicePath.url.employees;
   return makeModifyWebRequest(
     endpoint,

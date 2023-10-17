@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
-import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { Colors } from '../../../constants';
 import EmptyEmployeesComponent from './Components/EmptyEmployees';
 import AddEmployeeButton from '../../../components/Core/AddEmployeeButton';
@@ -15,7 +15,6 @@ import {
   setEmployeeList,
 } from '../../../redux/reducers/employeeState';
 import EmployeesComponent from './Components/Employees';
-import Header from '../../../components/Core/Header';
 
 const HomeScreen = ({ navigation }: any): React.ReactElement => {
   const isFocused = useIsFocused();
@@ -32,9 +31,9 @@ const HomeScreen = ({ navigation }: any): React.ReactElement => {
     }
   }, [isFocused]);
 
-  const showError = (error: string) => {
+  const showErrorToast = (error: string) => {
     toast.show(error, {
-      type: 'success',
+      type: 'danger',
       placement: 'bottom',
       duration: 4000,
       animationType: 'slide-in',
@@ -45,20 +44,20 @@ const HomeScreen = ({ navigation }: any): React.ReactElement => {
     try {
       !stateEmployees?.employeeList?.length && setIsLoading(true);
       let employeeListResponse = await getAllEmployees();
-      if (employeeListResponse.status === STATUS_OK) {
+      if (employeeListResponse?.status === STATUS_OK) {
         if (employeeListResponse?.data?.length > 0) {
           setEmployees(employeeListResponse.data);
           checkIfStateShouldUpdate(employeeListResponse.data);
         }
       } else {
-        showError(
+        showErrorToast(
           'An error has occured retrieving the employee list' +
             `${employeeListResponse.status}`,
         );
       }
       setIsLoading(false);
     } catch (error: any) {
-      showError(error);
+      showErrorToast(error);
     }
   };
 

@@ -32,6 +32,15 @@ export const deleteEmployee = createAction(
   }),
 );
 
+export const updateEmployee = createAction(
+  '[EMPLOYEES] update Employee',
+  employeesList => ({
+    payload: {
+      employeesList,
+    },
+  }),
+);
+
 export const selectEmployees = (state: RootState): any | undefined =>
   state.employees;
 
@@ -67,6 +76,30 @@ const employeeReducer = createReducer(initialState, builder => {
       return {
         ...state,
         employeesList: _tempArr,
+      };
+    })
+    .addCase(updateEmployee, (state, action) => {
+      console.log(state, 'STATE');
+      console.log(action.payload, 'PAYLOAD');
+      let _tempArr = <any>[];
+      const existingEmployees = <any>state.employeeList;
+      const updatedEmployee = action.payload.employeesList;
+
+      const employeeIndex = existingEmployees.findIndex(
+        (employee: any) => employee.ID === updatedEmployee.ID,
+      );
+
+      if (employeeIndex !== -1) {
+        let _tempObj = { ...existingEmployees[employeeIndex] };
+        _tempObj = updatedEmployee;
+        _tempArr = [...existingEmployees];
+        _tempArr.splice(employeeIndex, 1);
+        _tempArr.push(_tempObj);
+        console.log('reached over here')
+      }
+      return {
+        ...state,
+        employeeList: _tempArr,
       };
     });
 });
