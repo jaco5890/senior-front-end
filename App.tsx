@@ -12,7 +12,7 @@ import { SafeAreaView } from 'react-native';
 import { AppNavigator } from './src/routing/AppNavigator';
 import { ToastProvider } from 'react-native-toast-notifications';
 import { default as defaultTheme } from './src/theme/default-theme.json';
-import { Colors } from 'react-native/Libraries/NewAppScreen';
+import Colors from './src/constants/Colors';
 
 export default function App() {
   return (
@@ -21,7 +21,7 @@ export default function App() {
       <IconRegistry icons={[EvaIconsPack]} />
       <ApplicationProvider {...eva} theme={defaultTheme}>
         <ToastProvider
-          successColor={Colors.default.successColor}
+          successColor={Colors.default.success}
           dangerColor={Colors.default.red}
           warningColor={Colors.default.warning}>
           <Provider store={store}>
