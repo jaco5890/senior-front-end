@@ -148,7 +148,7 @@ const LoginScreen = (): React.ReactElement => {
       setIsLoading(true);
       setTimeout(() => {
         setIsLoading(false);
-        dispatch(setRunning(true));
+        dispatch(setRunning(true)); //This is to mimic making a login API request
       }, 2000);
     }
   };
