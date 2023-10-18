@@ -18,14 +18,15 @@ export function addNewEmployee(employee: any) {
   return makeModifyWebRequest(endpoint, Token.apiToken.token, employee, 'POST');
 }
 
-export function deleteEmployee(employeeId: any) {
+export function deleteExistingEmployee(employeeId: any) {
   const endpoint =
     ServicePath.url.base + ServicePath.url.employees + '/' + `${employeeId}`;
   return makeWebRequest(endpoint, Token.apiToken.token, 'DELETE');
 }
 
-export function updateEmployee(employee: any) {
-  const endpoint = ServicePath.url.base + ServicePath.url.employees;
+export function updateExistingEmployee(employee: any, employeeId: any) {
+  const endpoint =
+    ServicePath.url.base + ServicePath.url.employees + '/' + `${employeeId}`;
   return makeModifyWebRequest(
     endpoint,
     Token.apiToken.token,
