@@ -11,8 +11,7 @@ import { CustomInput } from '../../../../components/Core/CustomInput';
 import { Colors, Routes } from '../../../../constants';
 import { useNavigation } from '@react-navigation/native';
 import { useToast } from 'react-native-toast-notifications';
-import { FilterIcon } from '../../../../components/Core/Icons';
-import { onlyNumbers } from '../../../../utils/regex.util';
+import { FilterIcon, SearchIcon } from '../../../../components/Core/Icons';
 
 type EmployeeProps = {
   employeeList: any;
@@ -37,7 +36,7 @@ const EmployeesComponent = (props: EmployeeProps) => {
 
   useEffect(() => {
     if (displayFilterSelected) {
-      setPlaceholdertext('Filter by birthday/skills');
+      setPlaceholdertext('Filter by skills');
     } else {
       setPlaceholdertext('Filter by name/surname/email');
     }
@@ -47,7 +46,7 @@ const EmployeesComponent = (props: EmployeeProps) => {
     setSearchText(text);
     if (text.length > 2) {
       if (displayFilterSelected) {
-        filterBySkillsOrBirthday(text);
+        filterBySkills(text);
       } else {
         filterByBasicInformation(text);
       }
@@ -56,20 +55,13 @@ const EmployeesComponent = (props: EmployeeProps) => {
     }
   };
 
-  const filterBySkillsOrBirthday = (text: any) => {
+  const filterBySkills = (text: any) => {
     let filteredList: any[] = [];
-    if (onlyNumbers.test(text)) {
-      console.log(text);
-      filteredList = employees.filter((employee: any) =>
-        employee?.basicInformation?.birthday.includes(text.toLowerCase()),
-      );
-    } else {
-      filteredList = employees.filter((employee: any) =>
-        employee.skills.some((skill: any) =>
-          skill.skill.toLowerCase().includes(text),
-        ),
-      );
-    }
+    filteredList = employees.filter((employee: any) =>
+      employee.skills.some((skill: any) =>
+        skill.skill.toLowerCase().includes(text),
+      ),
+    );
     setEmployees(filteredList);
   };
 
@@ -161,7 +153,7 @@ const EmployeesComponent = (props: EmployeeProps) => {
         <TouchableOpacity
           style={styles.filterContainer}
           onPress={() => setDisplayFilterSelected(!displayFilterSelected)}>
-          <FilterIcon />
+          {!displayFilterSelected ? <FilterIcon /> : <SearchIcon />}
         </TouchableOpacity>
       </View>
       <View style={styles.employeeListContainer}>

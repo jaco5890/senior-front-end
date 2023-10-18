@@ -5,7 +5,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
-import { StyleSheet, TouchableOpacity, Platform } from 'react-native';
+import { StyleSheet, TouchableOpacity, Platform, View } from 'react-native';
 import { TopNavigation, Text, Layout } from '@ui-kitten/components';
 
 import Colors from '../../constants/Colors';
@@ -31,7 +31,11 @@ const Header = React.memo((props: HeaderProps) => {
   };
 
   const getTitle = () => {
-    return <Text style={styles.title}>{title}</Text>;
+    return (
+      <View>
+        <Text style={styles.title}>{title}</Text>
+      </View>
+    );
   };
 
   return (
@@ -64,7 +68,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 14,
     color: Colors.default.primary,
-    marginLeft: 5,
+    marginTop: 5,
     fontWeight: '600',
   },
   headerIcons: {

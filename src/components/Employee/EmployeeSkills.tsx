@@ -172,6 +172,7 @@ const styles = StyleSheet.create({
     padding: 10,
     width: '100%',
     color: Colors.default.primary,
+    backgroundColor: Colors.default.white,
   },
   inputContainer: {
     marginTop: 0,
@@ -202,7 +203,7 @@ const styles = StyleSheet.create({
   },
   deleteContainer: {
     width: '5%',
-    marginTop: 60,
+    marginTop: 55,
   },
   yearsColumnContainer: {
     flexDirection: 'column',

@@ -9,5 +9,5 @@ export const onlyLettersWithSpaceAndHyphen = new RegExp(/^[a-zA-Z \-,.()]*$/);
 export const validEmail = new RegExp(
   /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
 );
-export const onlyNumbers = new RegExp(/^[0-9]*/);
+export const onlyNumbers = new RegExp('^[0-9]*$/');
 export const onlyLettersNumberSpace = new RegExp('^[A-Za-z0-9 ,.]*$');

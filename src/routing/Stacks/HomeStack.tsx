@@ -2,7 +2,6 @@
 import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
 import HomeScreen from '../../screens/TabsStack/HomeStack/HomeScreen';
-import ViewEmployee from '../../screens/TabsStack/HomeStack/ViewEmployee';
 import Routes from '../../constants/Routes';
 import Employee from '../../screens/TabsStack/HomeStack/Employee';
 
