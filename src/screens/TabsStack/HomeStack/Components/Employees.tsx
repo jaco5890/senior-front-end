@@ -9,8 +9,10 @@ import {
 } from 'react-native';
 import { CustomInput } from '../../../../components/Core/CustomInput';
 import { Colors, Routes } from '../../../../constants';
-import { useIsFocused, useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import { useToast } from 'react-native-toast-notifications';
+import { FilterIcon } from '../../../../components/Core/Icons';
+import { onlyNumbers } from '../../../../utils/regex.util';
 
 type EmployeeProps = {
   employeeList: any;
@@ -18,39 +20,73 @@ type EmployeeProps = {
 
 const EmployeesComponent = (props: EmployeeProps) => {
   const { employeeList } = props;
-  const isFocused = useIsFocused();
-  const [employees, setEmployees] = useState<any>([]);
+  const [employees, setEmployees] = useState<any>(employeeList);
   const navigation = useNavigation();
   const [searchText, setSearchText] = useState('');
   const searchTextRef: React.RefObject<any> = useRef(null);
   const [isSearchTextFocus, setIsSearchTextFocus] = useState(false);
-  const toast = useToast();
+  const [displayFilterSelected, setDisplayFilterSelected] = useState(false);
+  const [placeholderText, setPlaceholdertext] = useState('');
 
+  const toast = useToast();
   useEffect(() => {
-    if (isFocused) {
+    if (employeeList) {
       setEmployees(employeeList);
     }
-  }, [isFocused]);
+  }, [employeeList]);
+
+  useEffect(() => {
+    if (displayFilterSelected) {
+      setPlaceholdertext('Filter by birthday/skills');
+    } else {
+      setPlaceholdertext('Filter by name/surname/email');
+    }
+  }, [displayFilterSelected]);
 
   const onChangeSearchText = (text: any): void => {
     setSearchText(text);
     if (text.length > 2) {
-      const filteredData = employees.filter(
-        (employee: any) =>
-          employee?.basicInformation?.firstName
-            .toLowerCase()
-            .includes(text.toLowerCase()) ||
-          employee.basicInformation?.lastName
-            .toLowerCase()
-            .includes(text.toLowerCase()) ||
-          employee.basicInformation?.email
-            .toLowerCase()
-            .includes(text.toLowerCase()),
-      );
-      setEmployees(filteredData);
+      if (displayFilterSelected) {
+        filterBySkillsOrBirthday(text);
+      } else {
+        filterByBasicInformation(text);
+      }
     } else if (text.length === 0) {
       setEmployees(employeeList);
     }
+  };
+
+  const filterBySkillsOrBirthday = (text: any) => {
+    let filteredList: any[] = [];
+    if (onlyNumbers.test(text)) {
+      console.log(text);
+      filteredList = employees.filter((employee: any) =>
+        employee?.basicInformation?.birthday.includes(text.toLowerCase()),
+      );
+    } else {
+      filteredList = employees.filter((employee: any) =>
+        employee.skills.some((skill: any) =>
+          skill.skill.toLowerCase().includes(text),
+        ),
+      );
+    }
+    setEmployees(filteredList);
+  };
+
+  const filterByBasicInformation = (text: string) => {
+    const filteredList = employees.filter(
+      (employee: any) =>
+        employee?.basicInformation?.firstName
+          .toLowerCase()
+          .includes(text.toLowerCase()) ||
+        employee.basicInformation?.lastName
+          .toLowerCase()
+          .includes(text.toLowerCase()) ||
+        employee.basicInformation?.email
+          .toLowerCase()
+          .includes(text.toLowerCase()),
+    );
+    setEmployees(filteredList);
   };
 
   const viewEmployee = (employee: any) => {
@@ -103,23 +139,31 @@ const EmployeesComponent = (props: EmployeeProps) => {
 
   return (
     <View style={styles.container}>
-      <CustomInput
-        caption={''}
-        icon={''}
-        inputRef={searchTextRef}
-        isFocus={isSearchTextFocus}
-        label={''}
-        keyboardType={'email-address'}
-        size="large"
-        nextInputRef={searchTextRef}
-        onInputBlur={() => setIsSearchTextFocus(false)}
-        onInputChangeText={(text: any) => onChangeSearchText(text)}
-        onInputFocus={() => setIsSearchTextFocus(true)}
-        placeholder={'Search'}
-        returnKeyType={'done'}
-        status={'basic'}
-        value={searchText}
-      />
+      <View style={styles.searchContainer}>
+        <CustomInput
+          style={styles.input}
+          caption={''}
+          icon={''}
+          inputRef={searchTextRef}
+          isFocus={isSearchTextFocus}
+          label={''}
+          keyboardType={'email-address'}
+          size="large"
+          nextInputRef={searchTextRef}
+          onInputBlur={() => setIsSearchTextFocus(false)}
+          onInputChangeText={(text: any) => onChangeSearchText(text)}
+          onInputFocus={() => setIsSearchTextFocus(true)}
+          placeholder={placeholderText}
+          returnKeyType={'done'}
+          status={'basic'}
+          value={searchText}
+        />
+        <TouchableOpacity
+          style={styles.filterContainer}
+          onPress={() => setDisplayFilterSelected(!displayFilterSelected)}>
+          <FilterIcon />
+        </TouchableOpacity>
+      </View>
       <View style={styles.employeeListContainer}>
         <FlatList
           data={employees}
@@ -155,6 +199,10 @@ const styles = StyleSheet.create({
   rowContainer: {
     flexDirection: 'row',
   },
+  searchContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   columnContainer: {
     flexDirection: 'column',
   },
@@ -170,6 +218,13 @@ const styles = StyleSheet.create({
     color: Colors.default.primary,
     textAlign: 'right',
     fontWeight: '600',
+  },
+  input: {
+    width: '90%',
+  },
+  filterContainer: {
+    marginTop: 20,
+    marginLeft: 10,
   },
 });
 

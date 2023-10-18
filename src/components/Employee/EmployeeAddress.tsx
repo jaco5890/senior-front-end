@@ -120,9 +120,6 @@ const EmployeeAddress = ({
     if (text.length === 0) {
       setErrorStreetAddress('Street address cannot be empty');
       setStatusStreetAddress('danger');
-    } else if (!onlyLettersWithSpaceAndHyphen.test(text)) {
-      setErrorStreetAddress('Please enter a valid street address');
-      setStatusStreetAddress('danger');
     } else {
       setErrorStreetAddress('');
       setStatusStreetAddress('basic');
@@ -174,10 +171,6 @@ const EmployeeAddress = ({
   const verifyStreetAddress = (): boolean => {
     if (streetAddress.length === 0) {
       setErrorStreetAddress('Street address cannot be empty');
-      setStatusStreetAddress('danger');
-      return false;
-    } else if (!onlyLettersWithSpaceAndHyphen.test(streetAddress)) {
-      setErrorStreetAddress('Please enter a valid street address');
       setStatusStreetAddress('danger');
       return false;
     } else {

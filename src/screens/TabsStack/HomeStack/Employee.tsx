@@ -12,13 +12,18 @@ import EmployeeAddress from '../../../components/Employee/EmployeeAddress';
 import EmployeeInformationInterface from '../../../interfaces/employeePersonalInformation';
 import EmployeeAddressInterface from '../../../interfaces/employeeAddressInterface';
 import EmployeeSkillsInterface from '../../../interfaces/employeeSkillsInterface';
-import { addNewEmployee, updateExistingEmployee } from '../../../services/employees-service';
+import {
+  addNewEmployee,
+  deleteExistingEmployee,
+  updateExistingEmployee,
+} from '../../../services/employees-service';
 import AwesomeAlert from 'react-native-awesome-alerts';
 import { useToast } from 'react-native-toast-notifications';
 import { useReduxDispatch } from '../../../redux';
 import { STATUS_CREATED, STATUS_OK } from '../../../constants/Responses';
 import {
   addEmployee,
+  deleteEmployee,
   updateEmployee,
 } from '../../../redux/reducers/employeeState';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
@@ -71,14 +76,13 @@ const AddEmployee = (props: any): React.ReactElement => {
       setLoadingMessage('Adding employee');
       setIsLoading(true);
       let newEmployee = await addNewEmployee(employeeObject);
+      setIsLoading(false);
       if (newEmployee?.status === STATUS_CREATED) {
         showSuccessToast('Employee added successfully');
         dispatch(addEmployee(newEmployee?.data));
-        navigation.goBack();
       } else {
         showErrorToast(newEmployee?.message || 'Failed to add new employee');
       }
-      setIsLoading(false);
     } catch (error: any) {
       showErrorToast(error);
     }
@@ -94,16 +98,32 @@ const AddEmployee = (props: any): React.ReactElement => {
     try {
       setLoadingMessage('Updating employee');
       setIsLoading(true);
-      let updatedEmployee = await updateExistingEmployee(employeeObject);
-      console.log(updatedEmployee, 'updated employee')
+      let updatedEmployee = await updateExistingEmployee(
+        employeeObject,
+        employee._id,
+      );
+      setIsLoading(false);
       if (updatedEmployee?.status === STATUS_OK) {
-        showSuccessToast('Employee added successfully');
+        showSuccessToast('Employee updated successfully');
         dispatch(updateEmployee(updatedEmployee?.data));
-        navigation.goBack();
       } else {
         showErrorToast(updatedEmployee?.message || 'Failed to update employee');
       }
+    } catch (error: any) {
+      showErrorToast(error);
+    }
+  };
+
+  const submitDeleteEmployee = async () => {
+    try {
+      setLoadingMessage('Deleting employee');
+      setIsLoading(true);
+      let deletedEmployee = await deleteExistingEmployee(employee._id);
       setIsLoading(false);
+      if (deletedEmployee?.status === STATUS_OK) {
+        showSuccessToast('Employeed deleted successfully');
+        dispatch(deleteEmployee(deletedEmployee?.data));
+      }
     } catch (error: any) {
       showErrorToast(error);
     }
@@ -116,6 +136,9 @@ const AddEmployee = (props: any): React.ReactElement => {
       duration: 4000,
       animationType: 'slide-in',
     });
+    setTimeout(() => {
+      navigation.goBack();
+    }, 1500);
   };
 
   const showErrorToast = (error: string) => {
@@ -144,6 +167,10 @@ const AddEmployee = (props: any): React.ReactElement => {
 
   const saveButtonPressed = () => {
     setSaveEmployeePressed(true);
+  };
+
+  const deleteButtonPressed = () => {
+    submitDeleteEmployee();
   };
 
   return (
@@ -188,11 +215,18 @@ const AddEmployee = (props: any): React.ReactElement => {
           userFormOutput={skillsFormOutput}
           employeeSkills={employee?.skills}
         />
-        <TouchableOpacity
-          style={styles.saveButtonContainer}
-          onPress={saveButtonPressed}>
-          <Text style={styles.saveButtonText}>{buttonText}</Text>
-        </TouchableOpacity>
+        <View style={styles.rowContainer}>
+          <TouchableOpacity
+            style={styles.outlineButtonContainer}
+            onPress={deleteButtonPressed}>
+            <Text style={styles.outlineButtonText}>Delete employee</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.saveButtonContainer}
+            onPress={saveButtonPressed}>
+            <Text style={styles.saveButtonText}>{buttonText}</Text>
+          </TouchableOpacity>
+        </View>
       </KeyboardAwareScrollView>
     </View>
   );
@@ -221,15 +255,39 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     alignContent: 'center',
     borderRadius: 4,
-    width: '100%',
     alignSelf: 'center',
     justifyContent: 'center',
+  },
+  outlineButtonContainer: {
+    height: 48,
+    backgroundColor: Colors.default.white,
+    borderColor: Colors.default.tertiary,
+    borderWidth: 2,
+    alignItems: 'center',
+    alignContent: 'center',
+    borderRadius: 4,
+    alignSelf: 'center',
+    justifyContent: 'center',
+    marginRight: 10,
+  },
+  outlineButtonText: {
+    fontSize: 18,
+    color: Colors.default.tertiary,
+    textAlign: 'center',
+    fontWeight: '600',
+    paddingHorizontal: 10,
   },
   saveButtonText: {
     fontSize: 18,
     color: Colors.default.white,
     textAlign: 'center',
     fontWeight: '600',
+    paddingHorizontal: 10,
+  },
+  rowContainer: {
+    flexDirection: 'row',
+    alignContent: 'center',
+    justifyContent: 'center',
   },
 });
 

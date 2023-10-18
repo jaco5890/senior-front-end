@@ -8,7 +8,7 @@ import { useIsFocused } from '@react-navigation/native';
 import { useToast } from 'react-native-toast-notifications';
 import AwesomeAlert from 'react-native-awesome-alerts';
 import { getAllEmployees } from '../../../services/employees-service';
-import { STATUS_OK } from '../../../constants/Responses';
+import { NOT_FOUND, STATUS_OK } from '../../../constants/Responses';
 import { useReduxDispatch, useReduxSelector } from '../../../redux';
 import {
   selectEmployees,
@@ -23,8 +23,7 @@ const HomeScreen = ({ navigation }: any): React.ReactElement => {
   const stateEmployees = useReduxSelector(selectEmployees);
 
   const [isLoading, setIsLoading] = useState(false);
-  const [employees, setEmployees] = useState(stateEmployees?.employees);
-
+  const [employees, setEmployees] = useState(stateEmployees?.employeeList);
   useEffect(() => {
     if (isFocused) {
       getEmployeeList();
@@ -49,6 +48,8 @@ const HomeScreen = ({ navigation }: any): React.ReactElement => {
           setEmployees(employeeListResponse.data);
           checkIfStateShouldUpdate(employeeListResponse.data);
         }
+      } else if (employeeListResponse?.status === NOT_FOUND) {
+        setEmployees([]);
       } else {
         showErrorToast(
           'An error has occured retrieving the employee list' +

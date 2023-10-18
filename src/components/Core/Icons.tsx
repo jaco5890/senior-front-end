@@ -41,3 +41,13 @@ export const TrashIcon = (props: any) => (
     width="25"
   />
 );
+
+export const FilterIcon = (props: any) => (
+  <Icon
+    {...props}
+    name="funnel-outline"
+    fill={Colors.default.primary}
+    height="25"
+    width="25"
+  />
+);

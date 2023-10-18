@@ -65,7 +65,7 @@ const EmployeeInformation = ({
     if (employeeInformation) {
       setFirstName(employeeInformation?.firstName);
       setLastName(employeeInformation?.lastName);
-      setBirthday(employeeInformation?.birthday);
+      setBirthday(employeeInformation?.birthday.substring(0, 10));
       setCellphone(employeeInformation?.contactNumber);
       setEmail(employeeInformation?.email);
     }

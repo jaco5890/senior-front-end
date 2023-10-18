@@ -67,7 +67,7 @@ const employeeReducer = createReducer(initialState, builder => {
       const _duplicateStateArr = <any>state.employeeList;
       const stateEmployee = action.payload.employeesList;
       const employeeIndex = state.employeeList.findIndex(
-        (employee: any) => Number(employee.index) === Number(stateEmployee.id),
+        (employee: any) => Number(employee.ID) === Number(stateEmployee.ID),
       );
       if (employeeIndex !== -1) {
         _tempArr = [..._duplicateStateArr];
@@ -79,8 +79,6 @@ const employeeReducer = createReducer(initialState, builder => {
       };
     })
     .addCase(updateEmployee, (state, action) => {
-      console.log(state, 'STATE');
-      console.log(action.payload, 'PAYLOAD');
       let _tempArr = <any>[];
       const existingEmployees = <any>state.employeeList;
       const updatedEmployee = action.payload.employeesList;
@@ -95,7 +93,6 @@ const employeeReducer = createReducer(initialState, builder => {
         _tempArr = [...existingEmployees];
         _tempArr.splice(employeeIndex, 1);
         _tempArr.push(_tempObj);
-        console.log('reached over here')
       }
       return {
         ...state,
