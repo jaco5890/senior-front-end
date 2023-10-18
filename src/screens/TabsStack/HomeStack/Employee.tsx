@@ -39,6 +39,7 @@ const AddEmployee = (props: any): React.ReactElement => {
   const [loadingMessage, setLoadingMessage] = useState('');
   const [employee, setEmployee] = useState<any>({});
   const [buttonText, setButtonText] = useState('');
+  const [isInUpdateState, setIsInUpdateState] = useState(false);
   const [saveEmployeePressed, setSaveEmployeePressed] = useState(false);
   const [displayPopup, setDisplayPopup] = useState(false);
 
@@ -53,14 +54,16 @@ const AddEmployee = (props: any): React.ReactElement => {
     if (props?.route?.params?.employee) {
       setEmployee(props.route.params.employee);
       setButtonText('Update employee');
+      setIsInUpdateState(true);
     } else {
       setButtonText('Save employee');
+      setIsInUpdateState(false);
     }
   }, [isFocused]);
 
   useEffect(() => {
     if (employeeInformation && employeeAddress && employeeSkills) {
-      if (buttonText === 'Save employee') {
+      if (!isInUpdateState) {
         submitAddEmployee();
       } else {
         submitUpdateEmployee();
@@ -217,11 +220,13 @@ const AddEmployee = (props: any): React.ReactElement => {
           employeeSkills={employee?.skills}
         />
         <View style={styles.rowContainer}>
-          <TouchableOpacity
-            style={styles.outlineButtonContainer}
-            onPress={() => setDisplayPopup(true)}>
-            <Text style={styles.outlineButtonText}>Delete employee</Text>
-          </TouchableOpacity>
+          {isInUpdateState && (
+            <TouchableOpacity
+              style={styles.outlineButtonContainer}
+              onPress={() => setDisplayPopup(true)}>
+              <Text style={styles.outlineButtonText}>Delete employee</Text>
+            </TouchableOpacity>
+          )}
           <TouchableOpacity
             style={styles.saveButtonContainer}
             onPress={saveButtonPressed}>
