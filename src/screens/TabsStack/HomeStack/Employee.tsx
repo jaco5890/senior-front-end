@@ -27,6 +27,7 @@ import {
   updateEmployee,
 } from '../../../redux/reducers/employeeState';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
+import { ModalPopup } from '../../../components/Core/Popup';
 
 const AddEmployee = (props: any): React.ReactElement => {
   const toast = useToast();
@@ -39,6 +40,8 @@ const AddEmployee = (props: any): React.ReactElement => {
   const [employee, setEmployee] = useState<any>({});
   const [buttonText, setButtonText] = useState('');
   const [saveEmployeePressed, setSaveEmployeePressed] = useState(false);
+  const [displayPopup, setDisplayPopup] = useState(false);
+
   const [employeeInformation, setEmployeeInformation] =
     useState<EmployeeInformationInterface | null>(null);
   const [employeeAddress, setEmployeeAddress] =
@@ -169,13 +172,14 @@ const AddEmployee = (props: any): React.ReactElement => {
     setSaveEmployeePressed(true);
   };
 
-  const deleteButtonPressed = () => {
-    submitDeleteEmployee();
+  const handlePopupOutput = (output: any) => {
+    setDisplayPopup(false);
+    output?.deleteAccount && submitDeleteEmployee();
   };
 
   return (
     <View style={styles.container}>
-      <Header title="" />
+      <Header title={employee?.ID ? 'Update employee' : 'Add employee'} />
       {isLoading && (
         <AwesomeAlert
           show={isLoading}
@@ -197,9 +201,6 @@ const AddEmployee = (props: any): React.ReactElement => {
         snapToStart={false}
         contentContainerStyle={styles.scrollViewContainer}
         scrollEnabled={true}>
-        <Text style={styles.label}>
-          {employee?.ID ? 'Update' : 'Add'} employee
-        </Text>
         <EmployeeInformation
           saveEmployeePressed={saveEmployeePressed}
           userFormOutput={informationFormOutput}
@@ -218,7 +219,7 @@ const AddEmployee = (props: any): React.ReactElement => {
         <View style={styles.rowContainer}>
           <TouchableOpacity
             style={styles.outlineButtonContainer}
-            onPress={deleteButtonPressed}>
+            onPress={() => setDisplayPopup(true)}>
             <Text style={styles.outlineButtonText}>Delete employee</Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -227,6 +228,13 @@ const AddEmployee = (props: any): React.ReactElement => {
             <Text style={styles.saveButtonText}>{buttonText}</Text>
           </TouchableOpacity>
         </View>
+        {displayPopup && (
+          <ModalPopup
+            popupOutput={handlePopupOutput}
+            message={'Are you sure you want to delete this employee'}
+            title={'Delete employee'}
+          />
+        )}
       </KeyboardAwareScrollView>
     </View>
   );
@@ -238,6 +246,7 @@ const styles = StyleSheet.create({
   },
   parentInformationContainer: {
     paddingHorizontal: 16,
+    paddingTop: 16,
   },
   scrollViewContainer: {
     flexGrow: 1,
@@ -288,6 +297,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignContent: 'center',
     justifyContent: 'center',
+    marginBottom: 30,
   },
 });
 

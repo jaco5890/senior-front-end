@@ -5,10 +5,9 @@ import Colors from '../../constants/Colors';
 type ButtonProps = {
   text: string;
   pressedOutput: (pressed: boolean) => void;
-  disabled: boolean;
 };
-const Button = (props: ButtonProps) => {
-  const { text = '', pressedOutput, disabled = false } = props;
+const OutlineButton = (props: ButtonProps) => {
+  const { text = '', pressedOutput } = props;
 
   const buttonPressed = () => {
     pressedOutput(true);
@@ -17,14 +16,8 @@ const Button = (props: ButtonProps) => {
   return (
     <View style={[styles.mainButtons]}>
       <View style={styles.buttonSpacing}>
-        <TouchableOpacity
-          onPress={buttonPressed}
-          disabled={disabled}
-          style={!disabled ? styles.button : styles.buttonInvalid}>
-          <Text
-            style={!disabled ? styles.buttonText : styles.invalidButtonText}>
-            {text}
-          </Text>
+        <TouchableOpacity onPress={buttonPressed} style={styles.button}>
+          <Text style={styles.buttonText}>{text}</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -39,17 +32,8 @@ const styles = StyleSheet.create({
   },
   button: {
     height: 48,
-    backgroundColor: Colors.default.primary,
-    alignItems: 'center',
-    alignContent: 'center',
-    borderRadius: 4,
-    width: '100%',
-    alignSelf: 'center',
-    justifyContent: 'center',
-  },
-  buttonInvalid: {
-    height: 48,
-    backgroundColor: Colors.default.invalid,
+    borderColor: Colors.default.secondary,
+    borderWidth: 1,
     alignItems: 'center',
     alignContent: 'center',
     borderRadius: 4,
@@ -59,13 +43,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontSize: 18,
-    color: Colors.default.white,
-    textAlign: 'center',
-    fontWeight: '600',
-  },
-  invalidButtonText: {
-    fontSize: 18,
-    color: Colors.default.invalidText,
+    color: Colors.default.secondary,
     textAlign: 'center',
     fontWeight: '600',
   },
@@ -76,4 +54,4 @@ const styles = StyleSheet.create({
     width: '100%',
   },
 });
-export default Button;
+export default OutlineButton;

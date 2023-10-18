@@ -1,4 +1,3 @@
-import { useNavigation } from '@react-navigation/native';
 import { Icon } from '@ui-kitten/components';
 import React, { useRef, useState } from 'react';
 import {

@@ -237,7 +237,7 @@ const EmployeeInformation = ({
   return (
     <View style={styles.container}>
       <Text style={styles.sectionLabel}>Basic information</Text>
-      <View style={styles.rowContainer}>
+      <View style={styles.nameContainer}>
         <CustomInput
           style={styles.halfWidth}
           caption={errorFirstName}
@@ -371,6 +371,10 @@ const styles = StyleSheet.create({
   columnContainer: {
     flexDirection: 'column',
   },
+  nameContainer: {
+    flexDirection: 'row',
+    marginRight: 10,
+  },
   input: {
     marginTop: 16,
   },
@@ -379,7 +383,7 @@ const styles = StyleSheet.create({
   },
   halfWidth: {
     marginTop: 16,
-    width: '45%',
+    width: '50%',
     marginRight: 10,
   },
   thirdWidth: {

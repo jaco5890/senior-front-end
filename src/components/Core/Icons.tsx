@@ -51,3 +51,23 @@ export const FilterIcon = (props: any) => (
     width="25"
   />
 );
+
+export const SearchIcon = (props: any) => (
+  <Icon
+    {...props}
+    name="search-outline"
+    fill={Colors.default.primary}
+    height="25"
+    width="25"
+  />
+);
+
+export const ArrowRight = (props: any) => (
+  <Icon
+    {...props}
+    name="chevron-right-outline"
+    fill={Colors.default.primary}
+    height="25"
+    width="25"
+  />
+);
